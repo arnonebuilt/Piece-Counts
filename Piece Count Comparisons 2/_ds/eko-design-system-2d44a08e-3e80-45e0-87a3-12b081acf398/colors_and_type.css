@@ -1,0 +1,238 @@
+/* ──────────────────────────────────────────────────────────────
+   eko Design System — Foundations
+   Aligned to the official eko Brand Book (March 2026).
+   Color palette is canonical: 4 swatches only.
+   Typography is canonical: Season Mix (display) + Gilroy (text).
+   ────────────────────────────────────────────────────────────── */
+
+/* ── Web fonts ──────────────────────────────────────────────
+   PRIMARY TEXT    · Gilroy         — Medium / Semibold / Bold
+   DISPLAY SERIF   · Season Mix     — Regular / Semibold
+   ALT / FALLBACK  · Everyday Sans  — loaded for internal UI
+*/
+
+/* ── Gilroy (sans) ─────────────────────────────────────────── */
+@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-Regular.otf') format('opentype');        font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-RegularItalic.otf') format('opentype');  font-weight:400; font-style:italic; font-display:swap; }
+@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-Medium.otf') format('opentype');         font-weight:500; font-style:normal; font-display:swap; }
+@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-MediumItalic.otf') format('opentype');   font-weight:500; font-style:italic; font-display:swap; }
+@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-Semibold.otf') format('opentype');       font-weight:600; font-style:normal; font-display:swap; }
+@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-SemiboldItalic.otf') format('opentype'); font-weight:600; font-style:italic; font-display:swap; }
+@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-Bold.otf') format('opentype');           font-weight:700; font-style:normal; font-display:swap; }
+@font-face { font-family:'Gilroy'; src:url('fonts/Gilroy-BoldItalic.otf') format('opentype');     font-weight:700; font-style:italic; font-display:swap; }
+
+/* ── Season Mix (display serif) ────────────────────────────── */
+@font-face { font-family:'Season Mix'; src:url('fonts/SeasonMix-Regular.ttf') format('truetype');      font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Season Mix'; src:url('fonts/SeasonMix-RegularItalic.ttf') format('truetype'); font-weight:400; font-style:italic; font-display:swap; }
+@font-face { font-family:'Season Mix'; src:url('fonts/SeasonMix-SemiBold.ttf') format('truetype');     font-weight:600; font-style:normal; font-display:swap; }
+@font-face { font-family:'Season Mix'; src:url('fonts/SeasonMix-SemiBoldItalic.ttf') format('truetype'); font-weight:600; font-style:italic; font-display:swap; }
+
+/* Season Mix VF — variable font (retained for precision weight adjustment) */
+@font-face { font-family:'Season Mix VF'; src:url('fonts/SeasonMixVFUprights.ttf') format('truetype-variations'); font-weight:100 900; font-style:normal; font-display:swap; }
+@font-face { font-family:'Season Mix VF'; src:url('fonts/SeasonMixVFItalics.ttf') format('truetype-variations');  font-weight:100 900; font-style:italic; font-display:swap; }
+
+/* ── Everyday Sans (alt sans — internal only, kept for fallback) ── */
+@font-face { font-family:'Everyday Sans'; src:url('fonts/EverydaySans-Regular.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Everyday Sans'; src:url('fonts/EverydaySans-Medium.otf') format('opentype');  font-weight:500; font-style:normal; font-display:swap; }
+@font-face { font-family:'Everyday Sans'; src:url('fonts/EverydaySans-Bold.otf') format('opentype');    font-weight:700; font-style:normal; font-display:swap; }
+
+:root {
+  /* ── COLORS: Canonical 4 (eko Brand Book, March 2026) ───────
+     Only these four swatches are brand-sanctioned. Everything
+     else (shadows, hairlines, overlays) derives from them.     */
+  --eko-purple:  #6B53FF;   /* Eko Purple   — primary brand */
+  --eko-black:   #111111;   /* Natural Black — primary text, dark surfaces */
+  --eko-white:   #FFFFFF;   /* Pure White    — primary surface */
+  --eko-gray:    #EBEBEB;   /* Neutral Gray  — hairlines, chips, subtle fills */
+
+  /* ── Semantic foreground / background ───────────────────────
+     Derived — expressed as alpha on canonical values so the
+     system stays within the 4-color palette on paper. */
+  --fg-1:        var(--eko-black);                 /* body + headings */
+  --fg-2:        rgba(17, 17, 17, 0.72);           /* secondary body */
+  --fg-3:        rgba(17, 17, 17, 0.52);           /* tertiary / captions */
+  --fg-4:        rgba(17, 17, 17, 0.32);           /* placeholder */
+  --fg-accent:   var(--eko-purple);
+  --fg-on-dark-1: var(--eko-white);
+  --fg-on-dark-2: rgba(255, 255, 255, 0.80);
+  --fg-on-dark-3: rgba(255, 255, 255, 0.60);
+
+  --bg-page:     var(--eko-white);
+  --bg-page-dark: var(--eko-black);
+  --bg-card:     var(--eko-gray);                  /* subtle card surface */
+  --bg-chip:     rgba(17, 17, 17, 0.60);           /* overlay chip on imagery */
+  --bg-accent:   var(--eko-purple);
+
+  --line:        var(--eko-gray);                  /* hairline dividers */
+  --line-on-dark: rgba(255, 255, 255, 0.12);
+
+  /* ── SHADOWS / ELEVATION ───────────────────────────────────
+     Neutral shadows, no purple glow. Brand Book is austere. */
+  --shadow-nav:   0 0 3px 0 rgba(17, 17, 17, 0.30);
+  --shadow-card:  0 2px 8px 0 rgba(17, 17, 17, 0.08);
+  --shadow-hover: 0 8px 24px 0 rgba(17, 17, 17, 0.10);
+
+  /* ── RADII ─────────────────────────────────────────────────
+     Retained from observed usage across Figma; the Brand Book
+     does not specify a radius scale, so this is an internal
+     working system — shipped here for consistency across
+     products that apply the brand. */
+  --radius-xs:   4px;    /* tiny chips / numeric tags */
+  --radius-sm:   6px;
+  --radius-md:   8px;    /* menu items, small chips */
+  --radius-lg:   12px;   /* press thumbs, mobile cards */
+  --radius-xl:   16px;   /* large labels, mobile close */
+  --radius-2xl:  20px;   /* desktop cards */
+  --radius-3xl:  24px;   /* large pill labels */
+  --radius-4xl:  28px;
+  --radius-5xl:  32px;
+  --radius-6xl:  40px;   /* color swatch, hero module */
+  --radius-pill: 70px;   /* CTA buttons */
+  --radius-nav-tuck: 0 0 50px 50px;
+
+  /* ── SPACING (multiples of 4) ─────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  10px;
+  --space-4:  12px;
+  --space-5:  14px;
+  --space-6:  16px;
+  --space-7:  20px;
+  --space-8:  24px;
+  --space-9:  28px;
+  --space-10: 32px;
+  --space-12: 40px;
+  --space-14: 50px;
+  --space-16: 60px;
+  --space-20: 80px;
+  --space-24: 100px;     /* side gutter desktop */
+  --space-module: 160px;
+
+  /* ── TYPE: Families ────────────────────────────────────────
+     Gilroy + Season Mix are the ONLY brand faces per Brand Book.
+     Label / mono / alt are internal design-system utilities,
+     never used in outward-facing marketing. */
+  --font-display:    'Season Mix', 'Times New Roman', serif;
+  --font-display-vf: 'Season Mix VF', 'Season Mix', 'Times New Roman', serif;
+  --font-sans:       'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans-alt:   'Everyday Sans', 'Gilroy', -apple-system, sans-serif;
+  --font-label:      'Helvetica', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:       ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* ── TYPE: Weights ─────────────────────────────────────────
+     Brand Book sanctions Gilroy Medium / Semibold / Bold and
+     Season Mix Regular only. */
+  --w-regular:  400;   /* @kind font */
+  --w-medium:   500;   /* @kind font */
+  --w-semibold: 600;   /* @kind font */
+  --w-bold:     700;   /* @kind font */
+
+  /* Element-level weight rules — canonical. Update here to
+     reshape every consumer. */
+  --w-display:  var(--w-regular);    /* Season Mix pinned to 400 */
+  --w-heading:  var(--w-regular);    /* All Season Mix headings */
+  --w-body:     var(--w-medium);     /* Gilroy 500 */
+  --w-cta:      var(--w-semibold);   /* Buttons + CTAs — Gilroy 600 */
+  --w-pill:     var(--w-semibold);   /* Pill labels — Gilroy 600 */
+  --w-nav:      var(--w-semibold);   /* Nav items — Gilroy 600 */
+
+  /* ── TYPE: Size tokens (desktop canonical, Brand Book) ─────
+     Display 100 · H1 60 · H2 44 · Accent-1 44 · Accent-2 28
+     Body-1 28 · Body-2 20 · Body-3 16 · CTA 20 */
+  --t-display:   100px;
+  --t-h1:        60px;
+  --t-h2:        44px;
+  --t-accent-1:  44px;
+  --t-accent-2:  28px;
+  --t-body-1:    28px;
+  --t-body-2:    20px;
+  --t-body-3:    16px;
+  --t-cta:       20px;
+  --t-label:     18px;     /* spec labels only (Helvetica) */
+
+  /* Mobile tokens (Brand Book "Typography Mobile") */
+  --t-display-m:  60px;
+  --t-h1-m:       40px;
+  --t-h2-m:       28px;
+  --t-accent-1-m: 28px;
+  --t-accent-2-m: 20px;
+  --t-body-1-m:   20px;
+  --t-body-2-m:   16px;
+  --t-body-3-m:   14px;   /* line-height 110% on mobile body-3 */
+  --t-cta-m:      16px;
+
+  /* Line heights / tracking (Brand Book spec) */
+  --lh-tight: 1.0;        /* @kind font */ /* display + h1/h2/accents */
+  --lh-snug:  1.1;        /* @kind font */ /* mobile body-3 */
+  --lh-body:  1.2;        /* @kind font */ /* body 1–3 desktop */
+  --ls-display: -0.01em;  /* -1% */
+  --ls-body:    -0.02em;  /* -2% */
+  --ls-tight:   -0.01em;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Semantic element defaults — Brand Book type scale applied.
+   ────────────────────────────────────────────────────────────── */
+html { font-family: var(--font-sans); color: var(--fg-1); background: var(--bg-page); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+body { margin: 0; font-size: var(--t-body-3); line-height: var(--lh-body); letter-spacing: var(--ls-tight); color: var(--fg-1); }
+
+/* Family utilities */
+.font-display { font-family: var(--font-display); font-weight: var(--w-regular); letter-spacing: var(--ls-display); line-height: var(--lh-tight); }
+.font-sans    { font-family: var(--font-sans); }
+.font-label   { font-family: var(--font-label); }
+.font-mono    { font-family: var(--font-mono); }
+
+/* Display / Headings — Season Mix at every heading scale.
+   Regular weight is default; Accent scale is Semibold. */
+h1.eko-display, .eko-display {
+  font-family: var(--font-display); font-weight: var(--w-regular);
+  font-size: var(--t-display); line-height: var(--lh-tight); letter-spacing: var(--ls-display);
+  color: var(--fg-1); margin: 0;
+}
+h1, .eko-h1 {
+  font-family: var(--font-display); font-weight: var(--w-regular);
+  font-size: var(--t-h1); line-height: var(--lh-tight); letter-spacing: var(--ls-display);
+  color: var(--fg-1); margin: 0;
+}
+h2, .eko-h2 {
+  font-family: var(--font-display); font-weight: var(--w-regular);
+  font-size: var(--t-h2); line-height: var(--lh-tight); letter-spacing: var(--ls-display);
+  color: var(--fg-1); margin: 0;
+}
+.eko-accent-1 {
+  font-family: var(--font-display); font-weight: var(--w-display);
+  font-size: var(--t-accent-1); line-height: var(--lh-tight); letter-spacing: var(--ls-display);
+}
+.eko-accent-2 {
+  font-family: var(--font-display); font-weight: var(--w-display);
+  font-size: var(--t-accent-2); line-height: var(--lh-tight); letter-spacing: var(--ls-display);
+}
+
+/* Body — Gilroy Medium.  */
+p, .eko-body-1 { font-family: var(--font-sans); font-weight: var(--w-medium); font-size: var(--t-body-1); line-height: var(--lh-body); letter-spacing: var(--ls-body); color: var(--fg-1); margin: 0; }
+.eko-body-2 { font-family: var(--font-sans); font-weight: var(--w-medium); font-size: var(--t-body-2); line-height: var(--lh-body); letter-spacing: var(--ls-body); }
+.eko-body-3 { font-family: var(--font-sans); font-weight: var(--w-medium); font-size: var(--t-body-3); line-height: var(--lh-body); letter-spacing: var(--ls-tight); }
+
+/* CTA — Gilroy Semibold (--w-cta). */
+.eko-cta, button.eko-cta { font-family: var(--font-sans); font-weight: var(--w-cta); font-size: var(--t-cta); line-height: var(--lh-snug); letter-spacing: var(--ls-body); }
+
+/* Pill label — Gilroy Semibold (--w-pill). */
+.eko-pill { font-family: var(--font-sans); font-weight: var(--w-pill); letter-spacing: -0.02em; padding: 12px 22px; border-radius: var(--radius-3xl); font-size: 18px; }
+
+/* Squircle modifier — apply to imagery, cards, section containers.
+   Not for buttons, nav, pills, or form chrome. */
+.eko-squircle { -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 preserveAspectRatio=%22none%22><path d=%22M90,0 C96,0 100,4 100,10 L100,90 C100,96 96,100 90,100 L10,100 C4,100 0,96 0,90 L0,10 C0,4 4,0 10,0 Z%22 fill=%22black%22/></svg>'); mask:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 preserveAspectRatio=%22none%22><path d=%22M90,0 C96,0 100,4 100,10 L100,90 C100,96 96,100 90,100 L10,100 C4,100 0,96 0,90 L0,10 C0,4 4,0 10,0 Z%22 fill=%22black%22/></svg>'); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+
+/* Eyebrow — Gilroy Medium (small uppercase-ish label introducing a section) */
+.eko-eyebrow { font-family: var(--font-sans); font-weight: var(--w-medium); font-size: var(--t-body-3); line-height: var(--lh-body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-accent); }
+
+/* Small design-system spec labels (never appears in marketing) */
+.eko-label { font-family: var(--font-label); font-weight: 500; font-size: var(--t-label); line-height: 1; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-accent); }
+
+/* Monospace — used sparingly (UPC numbers in product chips) */
+code, .eko-mono { font-family: var(--font-mono); font-weight: var(--w-regular); }
+
+/* On-dark variants */
+.on-dark h1, .on-dark h2, .on-dark p, .on-dark, .on-dark * { color: var(--fg-on-dark-1); }
+.on-dark .eko-body-2 { color: var(--fg-on-dark-2); }

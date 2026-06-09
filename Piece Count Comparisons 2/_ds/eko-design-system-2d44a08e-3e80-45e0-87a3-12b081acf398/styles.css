@@ -1,0 +1,6 @@
+/* ──────────────────────────────────────────────────────────────
+   eko Design System — global entry point.
+   Consumers link THIS file. It pulls in the canonical foundation
+   (4-color palette + Season Mix / Gilroy type scale + tokens).
+   ────────────────────────────────────────────────────────────── */
+@import "colors_and_type.css";
