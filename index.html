@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piece Count Comparisons</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg-page); color:var(--fg-1);
+    font-family:var(--font-sans);
+  }
+
+  /* ── Sticky header (brand bar + layout column titles) ── */
+  .masthead{ position:sticky; top:0; z-index:10; background:var(--bg-page); }
+  .topbar{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    padding:30px 56px 20px;
+  }
+  .head-left{ display:flex; flex-direction:column; gap:12px; }
+  .eyebrow{
+    font-family:var(--font-sans); font-weight:var(--w-medium);
+    font-size:13px; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--fg-accent);
+  }
+  h1.title{
+    font-family:var(--font-display); font-weight:var(--w-regular);
+    font-size:clamp(28px, 3vw, 44px); line-height:1; letter-spacing:var(--ls-display);
+    margin:0; color:var(--fg-1);
+  }
+  .logo{ height:24px; width:auto; display:block; }
+
+  .col-titles{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:28px;
+    padding:6px 56px 18px;
+    border-bottom:1px solid var(--line);
+  }
+  .col-title{
+    display:flex; align-items:baseline; gap:12px;
+  }
+  .col-title .n{
+    font-family:var(--font-sans); font-weight:var(--w-semibold);
+    font-size:14px; color:var(--fg-4); font-variant-numeric:tabular-nums;
+  }
+  .col-title .t{
+    font-family:var(--font-display); font-weight:var(--w-regular);
+    font-size:clamp(20px, 1.9vw, 30px); line-height:1; letter-spacing:var(--ls-display);
+    color:var(--fg-1);
+  }
+
+  /* ── Stacked product rows ───────────────── */
+  .stack{ padding:30px 56px 56px; display:flex; flex-direction:column; gap:24px; }
+  .row{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .well{
+    position:relative; aspect-ratio:5/4; width:100%;
+    background:var(--bg-page); border:1px solid var(--line);
+    border-radius:var(--radius-2xl); overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* Square center-crop, then 10% clipped off top + bottom (well is 5:4 = 80% as tall). */
+  .well video{ width:100%; height:auto; aspect-ratio:1/1; object-fit:cover; object-position:center; flex:0 0 auto; display:block; }
+  .well::after{
+    content:""; position:absolute; inset:0;
+    background:var(--bg-card); opacity:0; transition:opacity .4s ease; pointer-events:none;
+  }
+  .well.loading::after{ opacity:1; }
+  .well{ cursor:zoom-in; transition:box-shadow .2s ease; }
+  .well:hover{ box-shadow:var(--shadow-hover); }
+
+  /* ── Lightbox ───────────────────────────── */
+  .lightbox{
+    position:fixed; inset:0; z-index:100;
+    background:rgba(17,17,17,0.92); backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:22px;
+    padding:48px; opacity:0; transition:opacity .3s cubic-bezier(.22,1,.36,1);
+  }
+  .lightbox.show{ opacity:1; }
+  .lightbox[hidden]{ display:none; }
+  .lb-stage{
+    transform:scale(.97); transition:transform .3s cubic-bezier(.22,1,.36,1);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox.show .lb-stage{ transform:scale(1); }
+  .lb-stage video{
+    max-width:90vw; max-height:82vh; width:auto; height:auto; display:block;
+    border-radius:var(--radius-2xl); background:var(--eko-white);
+  }
+  .lb-cap{
+    font-family:var(--font-display); font-weight:var(--w-regular);
+    font-size:clamp(20px,2.4vw,32px); letter-spacing:var(--ls-display);
+    color:var(--fg-on-dark-1);
+  }
+  .lb-close{
+    position:fixed; top:26px; right:30px; width:46px; height:46px; border-radius:50%;
+    border:1px solid var(--line-on-dark); background:rgba(255,255,255,0.08);
+    color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:background .16s ease;
+  }
+  .lb-close:hover{ background:rgba(255,255,255,0.16); }
+  .lb-close svg{ width:18px; height:18px; }
+
+  @media (max-width:900px){
+    .col-titles{ grid-template-columns:1fr; gap:4px; }
+    .col-titles .col-title:not(:first-child){ display:none; }
+    .row{ grid-template-columns:1fr; }
+    .topbar,.col-titles,.stack{ padding-left:24px; padding-right:24px; }
+  }
+</style>
+</head>
+<body>
+  <template id="__bundler_thumbnail">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <rect width="100" height="100" fill="#6B53FF"/>
+      <rect x="30" y="34" width="13" height="13" rx="2.5" fill="#fff"/>
+      <rect x="43.5" y="34" width="13" height="13" rx="2.5" fill="#fff" opacity="0.7"/>
+      <rect x="57" y="34" width="13" height="13" rx="2.5" fill="#fff" opacity="0.45"/>
+      <rect x="30" y="47.5" width="13" height="13" rx="2.5" fill="#fff" opacity="0.7"/>
+      <rect x="43.5" y="47.5" width="13" height="13" rx="2.5" fill="#fff"/>
+      <rect x="57" y="47.5" width="13" height="13" rx="2.5" fill="#fff" opacity="0.7"/>
+      <rect x="30" y="61" width="13" height="13" rx="2.5" fill="#fff" opacity="0.45"/>
+      <rect x="43.5" y="61" width="13" height="13" rx="2.5" fill="#fff" opacity="0.7"/>
+      <rect x="57" y="61" width="13" height="13" rx="2.5" fill="#fff"/>
+    </svg>
+  </template>
+  <div class="masthead">
+    <div class="topbar">
+      <div class="head-left">
+        <span class="eyebrow">Product Capture · Comparison</span>
+        <h1 class="title">Piece Count Comparisons</h1>
+      </div>
+      <div class="head-right">
+        <svg class="logo" viewBox="0 0 39.75 18" fill="var(--eko-black)" aria-label="eko" role="img"><path d="M 6.622 4.754 C 10.278 4.754 13.243 7.719 13.243 11.377 C 13.243 11.801 13.202 12.219 13.127 12.623 L 3.965 12.623 C 4.417 13.904 5.417 14.555 6.656 14.555 C 7.84 14.555 8.375 14.206 8.792 13.712 L 12.819 13.712 C 11.874 16.219 9.456 18 6.622 18 C 2.965 18 0 15.034 0 11.377 C 0 7.719 2.965 4.754 6.622 4.754 Z M 33.128 4.754 C 36.792 4.754 39.757 7.719 39.75 11.377 C 39.75 15.034 36.785 18 33.128 18 C 29.472 18 26.507 15.034 26.507 11.377 C 26.507 7.719 29.472 4.754 33.128 4.754 Z M 18.454 11.205 L 22.323 5.061 L 26.986 5.061 L 22.816 10.904 L 28.068 17.705 L 23.001 17.705 L 20.481 14.178 L 17.961 17.705 L 14.496 17.705 L 14.496 0 L 18.454 0 L 18.454 11.205 Z M 33.128 8.568 C 31.663 8.568 30.479 9.754 30.479 11.384 C 30.479 13.014 31.663 14.192 33.128 14.192 C 34.594 14.192 35.778 13.007 35.778 11.384 C 35.778 9.754 34.594 8.568 33.128 8.568 Z M 6.622 8.226 C 5.416 8.226 4.389 8.939 3.965 10.13 L 9.278 10.13 C 8.861 8.939 7.827 8.226 6.622 8.226 Z" fill-rule="nonzero"/></svg>
+      </div>
+    </div>
+    <div class="col-titles">
+      <div class="col-title"><span class="n">01</span><span class="t">Current Layout</span></div>
+      <div class="col-title"><span class="n">02</span><span class="t">Side of Product</span></div>
+      <div class="col-title"><span class="n">03</span><span class="t">In Front of Product</span></div>
+    </div>
+  </div>
+
+  <div class="stack">
+    <div class="row" data-group>
+      <div class="well loading" data-well><video data-vid muted playsinline loop autoplay preload="auto" src="uploads/Tool Set 1.mp4"></video></div>
+      <div class="well loading" data-well><video data-vid muted playsinline loop autoplay preload="auto" src="uploads/Tool Set 2.mp4"></video></div>
+      <div class="well loading" data-well><video data-vid muted playsinline loop autoplay preload="auto" src="uploads/Tool Set 3.mp4"></video></div>
+    </div>
+    <div class="row" data-group>
+      <div class="well loading" data-well><video data-vid muted playsinline loop autoplay preload="auto" src="uploads/Doll Set 1.mp4"></video></div>
+      <div class="well loading" data-well><video data-vid muted playsinline loop autoplay preload="auto" src="uploads/Doll Set 2.mp4"></video></div>
+      <div class="well loading" data-well><video data-vid muted playsinline loop autoplay preload="auto" src="uploads/Doll Set 3.mp4"></video></div>
+    </div>
+    <div class="row" data-group>
+      <div class="well loading" data-well><video data-vid muted playsinline loop autoplay preload="auto" src="uploads/Board Game 1.mp4"></video></div>
+      <div class="well loading" data-well><video data-vid muted playsinline loop autoplay preload="auto" src="uploads/Board Game 2.mp4"></video></div>
+      <div class="well loading" data-well><video data-vid muted playsinline loop autoplay preload="auto" src="uploads/Board Game 3.mp4"></video></div>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox" hidden>
+    <button class="lb-close" id="lbClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="lb-stage"><video id="lbVideo" muted playsinline loop></video></div>
+    <div class="lb-cap" id="lbCap"></div>
+  </div>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-well]').forEach(well=>{
+    const v = well.querySelector('video');
+    const ready = ()=>{ well.classList.remove('loading'); const p=v.play(); if(p&&p.catch)p.catch(()=>{}); };
+    if(v.readyState>=2) ready(); else v.addEventListener('loadeddata', ready, {once:true});
+    v.addEventListener('canplay', ()=>{ const p=v.play(); if(p&&p.catch)p.catch(()=>{}); });
+  });
+
+  // Phase-lock the three arrangements within each product row to its first video.
+  const groups = [...document.querySelectorAll('[data-group]')].map(g=>[...g.querySelectorAll('video')]);
+  function tick(){
+    groups.forEach(vids=>{
+      const master = vids[0], t = master.currentTime;
+      if(isFinite(t) && !master.paused){
+        for(let i=1;i<vids.length;i++){
+          if(vids[i].readyState>=2 && Math.abs(vids[i].currentTime - t) > 0.12){
+            try{ vids[i].currentTime = t; }catch(e){}
+          }
+        }
+      }
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // ── Click-to-expand lightbox ──
+  const titles = ['Current Layout','Side of Product','In Front of Product'];
+  const lb = document.getElementById('lightbox');
+  const lbV = document.getElementById('lbVideo');
+  const lbCap = document.getElementById('lbCap');
+  const lbClose = document.getElementById('lbClose');
+  let closeTimer;
+
+  function openLB(video){
+    clearTimeout(closeTimer);
+    lbV.src = video.currentSrc || video.src;
+    lbV.currentTime = isFinite(video.currentTime) ? video.currentTime : 0;
+    const cells = [...video.closest('.row').querySelectorAll('video')];
+    lbCap.textContent = titles[cells.indexOf(video)] || '';
+    lb.hidden = false;
+    requestAnimationFrame(()=> lb.classList.add('show'));
+    const p = lbV.play(); if(p && p.catch) p.catch(()=>{});
+  }
+  function closeLB(){
+    lb.classList.remove('show');
+    lbV.pause();
+    closeTimer = setTimeout(()=>{ lb.hidden = true; lbV.removeAttribute('src'); lbV.load(); }, 320);
+  }
+
+  document.querySelectorAll('[data-well]').forEach(well=>{
+    well.addEventListener('click', ()=> openLB(well.querySelector('video')));
+  });
+  lbClose.addEventListener('click', closeLB);
+  lb.addEventListener('click', e=>{ if(e.target === lb) closeLB(); });
+  window.addEventListener('keydown', e=>{ if(e.key === 'Escape' && !lb.hidden) closeLB(); });
+})();
+</script>
+</body>
+</html>
